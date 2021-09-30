@@ -1,6 +1,6 @@
 import { getStateRelay, switchRelay, gpioCan, writePin } from './raspberry/raspberry';
 import { sensorTemperature } from '@constant/pin';
-import { createair } from '@database/bdd'
+import { createAir } from '@database/bdd'
 import Socket from 'socket';
 import { logger } from 'logger';
 
@@ -56,7 +56,7 @@ export async function gestionAir(){
 	}else{
 		Socket.emit('Temperature ~= consigne, Aucune Action',procedure);
 	}
-	await createair(dataAir)
+	await createAir(dataAir)
 }
 
 

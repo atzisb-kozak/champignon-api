@@ -3,6 +3,7 @@ import { Co2Config } from '@constant/configCo2';
 import Socket from 'socket';
 import axios from 'axios';
 import { logger } from './logger';
+import { delay } from './delay';
 
 const salle: string = Co2Config.salle1
 
@@ -18,7 +19,7 @@ let dataCo2:dataCo2 = {
 	consigneCo2:2500,
 	consigneattendu: 2500,
 	co2:null,
-	freq:204,
+	freq:170,
 };
 let deltaCo2=0;
 
@@ -63,6 +64,24 @@ export async function descenteCo2(pas: number) {
 		}
 		return dataCo2.consigneCo2
 	}, tempsPas)
+}
+
+async function gestionVariateur() {
+	if (dataCo2.consigneCo2 - dataCo2.consigneCo2 > 0 && dataCo2.freq != 250) {
+		dataCo2.freq += 5;
+		if (dataCo2.freq > 250) {
+			dataCo2.freq = 250;
+		}
+	} else if (dataCo2.consigneCo2 - dataCo2.consigneCo2 < 0 && dataCo2.freq != 150){
+		dataCo2.freq -= 5;
+		if (dataCo2.freq < 150) {
+			dataCo2.freq = 150;
+		}
+	} else {
+		setVariateur(150);
+		await delay(30);
+		setVariateur(0);
+	}
 }
 
 function setVariateur(cycle: number){

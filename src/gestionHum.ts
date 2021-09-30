@@ -34,20 +34,19 @@ let dataHum: dataHum = {
 
 let gpioSec: number = sensorTemperature.gpioSec;
 let gpioHum: number = sensorTemperature.gpioHum;
-let gpioVentilo: number = sensorTemperature.gpioVentilo;
-let gpioBrume: number = sensorTemperature.gpioBrume;
+let gpioBrume: number = sensorTemperature.gpioEauxSols;
 let deltaTemp=0;
 let dureeAction=0;
 let procedure: string;
 let deltaHum=0;
 
 export async function gestionHum(mesureSec: number, mesureHum: number){
-	try {
+	try {;
+		logger.info('Mesure Seche :');
 		dataHum.temperatureSec = mesureSec;
-		logger.info('Mesure Seche : ', dataHum.temperatureSec);
 		// Socket.emit('',dataHum.temperatureSec);
 		dataHum.temperatureHum = mesureHum;
-		logger.info('Mesure Humide : ', dataHum.temperatureHum);
+		logger.info(`Mesure Humide : ${dataHum.temperatureHum}`);
 		//Socket.emit('',dataHum.temperatureHum);
 		let pressSaturanteSec = calculPression(dataHum.temperatureSec);
 		let pressSaturanteHum = calculPression(dataHum.temperatureHum);
@@ -116,9 +115,9 @@ export async function mesureSec(){
 		dataHum.temperatureSec=valueMesure+dataHum.etalSec; 
 
 		if(dataHum.temperatureSec < 10 || dataHum.temperatureSec > 40){
-				throw new Error('Probleme de Temperature Sec');
+			throw new Error('Probleme de Temperature Sec');
 		}else{
-				return Number(dataHum.temperatureSec);
+			return dataHum.temperatureSec;
 		}
 	} catch(error) {
 		logger.error(`Erreur Mesure Sec : ${error}`)
