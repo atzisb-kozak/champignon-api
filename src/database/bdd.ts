@@ -5,6 +5,7 @@ import { getRepository, Repository } from "typeorm";
 import { CreateAir, UpdateAir } from "./interface/air";
 import { CreateCo2, UpdateCo2 } from "./interface/co2";
 import { CreateHum, UpdateHum } from "./interface/hum";
+import { logger } from 'logger';
 
 const _Air: Repository<Air> = getRepository(Air);
 const _Hum: Repository<Hum> = getRepository(Hum);
@@ -20,16 +21,16 @@ export async function airID(id: number): Promise<Air| undefined> {
 export async function lastAir(): Promise<Air | undefined> {
 	return (await _Air.find({order: {id: "DESC"}}))[0]
 }
-export async function createair(air: CreateAir): Promise<any> {
+export async function createAir(air: CreateAir): Promise<any> {
   try {
     const dataair = _Air.create(air);
     return await dataair.save();
   } catch (error) {
-    //logger.error(`[SachetResolver](createSachet) : ${error.message}`);
+    logger.error(`[bdd](createAir) : ${error}`);
   }
 }
  
-export async function updateair (air: UpdateAir, id: number):  Promise<any> {
+export async function updateAir (air: UpdateAir, id: number):  Promise<any> {
   try {
     const nbAffect = (await _Air.update(id, {...air})).affected;
       if (nbAffect !== 0){
@@ -37,7 +38,7 @@ export async function updateair (air: UpdateAir, id: number):  Promise<any> {
     }
     throw new Error('data wasn\'t stored in database');
   } catch (error) {
-    //logger.error(`[SachetResolver](updateSachet) : ${error.message}`);
+    logger.error(`[bdd](updateAir) : ${error}`);
     return false;
   }
 }
@@ -49,7 +50,7 @@ export async function deleteAir (id: number): Promise<any> {
     }
     throw new Error('data wasn\'t stored in database');
   } catch (error) {
-    // logger.error(`[SachetResolver](deleteSachet) : ${error.message}`);
+    logger.error(`[bdd](deleteAir) : ${error}`);
     return false;
   }
 }
@@ -69,7 +70,7 @@ export async function createHum(hum: CreateHum): Promise<any> {
     const dataHum = _Hum.create(hum);
     return await dataHum.save();
   } catch (error) {
-    //logger.error(`[SachetResolver](createSachet) : ${error.message}`);
+    logger.error(`[bdd](createHum) : ${error}`);
   }
 }
  
@@ -81,7 +82,7 @@ export async function updatHum (Hum: UpdateHum, id: number):  Promise<any> {
       }
       throw new Error('data wasn\'t stored in database');
   } catch (error) {
-    //logger.error(`[SachetResolver](updateSachet) : ${error.message}`);
+    logger.error(`[bdd](updateHum) : ${error}`);
     return false;
   }
 }
@@ -93,7 +94,7 @@ export async function deleteHum (id: number): Promise<any> {
     }
     throw new Error('data wasn\'t stored in database');
    }catch (error) {
-    // logger.error(`[SachetResolver](deleteSachet) : ${error.message}`);
+    logger.error(`[bdd](deleteHum) : ${error}`);
     return false;
    }
 }
@@ -112,7 +113,7 @@ export async function createCo2(Co2: CreateCo2): Promise<any> {
     const dataCo2 = _Co2.create(Co2);
     return await dataCo2.save();
   } catch (error) {
-    //logger.error(`[SachetResolver](createSachet) : ${error.message}`);
+    logger.error(`[bdd](createCo2) : ${error}`);
   }
 }
 
@@ -124,7 +125,7 @@ export async function updateCo2 (Co2: UpdateCo2, id: number):  Promise<any> {
     }
     throw new Error('data wasn\'t stored in database');
   } catch (error) {
-    //logger.error(`[SachetResolver](updateSachet) : ${error.message}`);
+    logger.error(`[bdd](updateCo2) : ${error}`);
     return false;
   }
 }
@@ -136,7 +137,7 @@ export async function deleteCo2 (id: number): Promise<any> {
     }
     throw new Error('data wasn\'t stored in database');
   }catch (error) {
-    // logger.error(`[SachetResolver](deleteSachet) : ${error.message}`);
+    logger.error(`[bdd](deleteCo2) : ${error}`);
     return false;
   }
 }
